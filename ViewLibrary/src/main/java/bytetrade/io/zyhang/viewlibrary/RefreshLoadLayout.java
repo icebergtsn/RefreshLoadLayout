@@ -3,7 +3,6 @@ package bytetrade.io.zyhang.viewlibrary;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +16,7 @@ import android.widget.Scroller;
 /**
  * Created by zyhang on 2019/5/13
  * <p>
- * Description:
+ * Description: 支持RecyclerView ScrollerView 下拉刷新，加载更多 WebView下拉刷新
  */
 public class RefreshLoadLayout extends ViewGroup {
 
@@ -145,14 +144,14 @@ public class RefreshLoadLayout extends ViewGroup {
                 if (mIsRefresh) {
                     scroll(-mHeaderHeight);
                 }
-
+                invalidate();
             }
         });
-        invalidate();
+
         mHeaderLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("tag22", "mm");
+
             }
         });
     }
@@ -178,9 +177,10 @@ public class RefreshLoadLayout extends ViewGroup {
                 if (mIsLoadMore) {
                     scroll(mFooterHeight);
                 }
+                invalidate();
             }
         });
-        invalidate();
+
         mFooterLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,13 +212,15 @@ public class RefreshLoadLayout extends ViewGroup {
     }
 
     public void setEmptyState(boolean isEmpty) {
-        View view = getChildAt(3);
-        if (isEmpty) {
-            view.setVisibility(GONE);
-            mEmptyLayout.setVisibility(VISIBLE);
-        } else {
-            view.setVisibility(VISIBLE);
-            mEmptyLayout.setVisibility(GONE);
+        if (getChildCount() > 3) {
+            View view = getChildAt(3);
+            if (isEmpty) {
+                view.setVisibility(GONE);
+                mEmptyLayout.setVisibility(VISIBLE);
+            } else {
+                view.setVisibility(VISIBLE);
+                mEmptyLayout.setVisibility(GONE);
+            }
         }
     }
 
@@ -470,7 +472,6 @@ public class RefreshLoadLayout extends ViewGroup {
         this.smoothScrollTo(0, SCROLLER_RESTORE_TIME);
     }
 
-    //
     private void fastRestore() {
         mCurrentState = STATE_NOT;
         this.smoothScrollTo(0, 500);
