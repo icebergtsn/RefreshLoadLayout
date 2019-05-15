@@ -1,19 +1,21 @@
 # Dependency
 
+支持RecyclerView ScrollerView 下拉刷新，加载更多 WebView下拉刷新，app中有示例。
+
 Add this in your root build.gradle file:
 
 ```java
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
 }
 ```
 Then, add the library to your module build.gradle:
 ```java
 dependencies {
-	        implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.0'
+         implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.0'
 }
 ```
 ### RecyclerView
