@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceError;
@@ -33,9 +32,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         mRll = findViewById(R.id.rll_web);
         mRll.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
-        View view = getLayoutInflater().inflate(R.layout.layout_empty, null);
-        Button button = view.findViewById(R.id.btn_empty);
-        mRll.setEmpty(view, button);
+        mRll.setEmpty( getLayoutInflater().inflate(R.layout.layout_empty, null));
 
         mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
             @Override

@@ -3,12 +3,12 @@ package bytetrade.io.zyhang.viewlibrary;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -17,7 +17,7 @@ import android.widget.Scroller;
 /**
  * Created by zyhang on 2019/5/13
  * <p>
- * Description:支持RecyclerView ScrollerView 下拉刷新，加载更多 WebView下拉刷新
+ * Description:
  */
 public class RefreshLoadLayout extends ViewGroup {
 
@@ -36,8 +36,6 @@ public class RefreshLoadLayout extends ViewGroup {
     //View
     private View mHeader;
     private View mFooter;
-    private View mEmpty;
-    private Button mBtnReCon;
     //高度
     private int mHeaderHeight = HEADER_DEFAULT_HEIGHT;
     private int mFooterHeight = FOOTER_DEFAULT_HEIGHT;
@@ -154,6 +152,7 @@ public class RefreshLoadLayout extends ViewGroup {
         mHeaderLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("tag22", "mm");
             }
         });
     }
@@ -189,40 +188,37 @@ public class RefreshLoadLayout extends ViewGroup {
         });
     }
 
-    public void setEmpty(final View view, Button button) {
-        mEmpty = view;
-        if (mEmpty != null && button != null) {
-            mBtnReCon = button;
-            mBtnReCon.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mHeaderStateListener.onRefresh(mBtnReCon);
-                }
-            });
-        }
+    public void setEmpty(final View view) {
+        view.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mHeaderStateListener.onRefresh(view);
+            }
+        });
+
         mEmptyLayout.removeAllViews();
-        mEmptyLayout.addView(mEmpty);
+        mEmptyLayout.addView(view);
 
         mEmptyLayout.post(new Runnable() {
             @Override
             public void run() {
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
                 mEmptyLayout.setGravity(Gravity.CENTER);
                 mEmptyLayout.setLayoutParams(layoutParams);
+                invalidate();
             }
         });
+
     }
 
     public void setEmptyState(boolean isEmpty) {
-        if (mEmpty != null) {
-            View view = getChildAt(3);
-            if (isEmpty) {
-                view.setVisibility(GONE);
-                mEmptyLayout.setVisibility(VISIBLE);
-            } else {
-                view.setVisibility(VISIBLE);
-                mEmptyLayout.setVisibility(GONE);
-            }
+        View view = getChildAt(3);
+        if (isEmpty) {
+            view.setVisibility(GONE);
+            mEmptyLayout.setVisibility(VISIBLE);
+        } else {
+            view.setVisibility(VISIBLE);
+            mEmptyLayout.setVisibility(GONE);
         }
     }
 
@@ -404,7 +400,7 @@ public class RefreshLoadLayout extends ViewGroup {
     /**
      * 触发下拉刷新
      */
-    private void startRefreshRefresh() {
+    private void startRefresh() {
 
         if (!mIsRefreshOpen) {
             return;
@@ -424,7 +420,7 @@ public class RefreshLoadLayout extends ViewGroup {
     /**
      * 触发上拉加载
      */
-    private void startLoadMoreRefresh() {
+    private void startLoadMore() {
 
         if (!mIsLoadMoreOpen) {
             return;
@@ -521,13 +517,13 @@ public class RefreshLoadLayout extends ViewGroup {
                         if (mScrollOffset < mHeaderHeight) {
                             fastRestore();
                         } else {
-                            startRefreshRefresh();
+                            startRefresh();
                         }
                     } else if (mCurrentState == STATE_UP) {
                         if (mScrollOffset < mFooterHeight) {
                             fastRestore();
                         } else {
-                            startLoadMoreRefresh();
+                            startLoadMore();
                         }
                     } else {
                         fastRestore();
