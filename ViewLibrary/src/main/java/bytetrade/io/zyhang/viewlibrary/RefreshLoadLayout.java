@@ -192,7 +192,7 @@ public class RefreshLoadLayout extends ViewGroup {
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mHeaderStateListener.onRefresh(view);
+                startRefresh();
             }
         });
 
