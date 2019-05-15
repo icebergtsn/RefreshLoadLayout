@@ -31,7 +31,6 @@ xml
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </bytetrade.io.zyhang.viewlibrary.RefreshLoadLayout>
     
 </bytetrade.io.zyhang.viewlibrary.RefreshLoadLayout>
 ```
