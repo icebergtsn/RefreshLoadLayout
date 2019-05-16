@@ -15,12 +15,14 @@ allprojects {
 Then, add the library to your module build.gradle:
 ```java
 dependencies {
-         implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.0'
+        implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.0'
 }
 ```
 Don't forget to add this whether you use it or not
 ```
-implementation 'com.android.support:recyclerview-v7:28.0.0'
+dependencies {
+        implementation 'com.android.support:recyclerview-v7:28.0.0'
+}
 ```
 
 # Usage
@@ -45,61 +47,61 @@ java
 
 ```java
 //设置开启下拉刷新和上拉加载
-        mRll.setFunctionState(true, true);
-        //头部布局
-        mRll.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
-        //底部布局
-        mRll.setFooter(getLayoutInflater().inflate(R.layout.layout_footer, null));
+mRll.setFunctionState(true, true);
+//头部布局
+mRll.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
+//底部布局
+mRll.setFooter(getLayoutInflater().inflate(R.layout.layout_footer, null));
 
-        //头部状态监听
-        mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
-            @Override
-            public void onScrollChange(View Header, int scrollOffset, int scrollRatio) {
+//头部状态监听
+mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
+        @Override
+        public void onScrollChange(View Header, int scrollOffset, int scrollRatio) {
 
-            }
+        }
 
-            @Override
-            public void onRefresh(View Header) {
-                //关闭刷新
-                mRll.refreshFinish();
-            }
+        @Override
+        public void onRefresh(View Header) {
+            //关闭刷新
+            mRll.refreshFinish();
+        }
 
-            @Override
-            public void onFinished(View Header) {
+        @Override
+        public void onFinished(View Header) {
 
-            }
-        });
+        }
+});
 
-        //尾部状态监听
-        mRll.addOnFooterStateListener(new RefreshLoadLayout.OnFooterStateListener() {
-            @Override
-            public void onScrollChange(View Footer, int scrollOffset, int scrollRatio) {
+//尾部状态监听
+mRll.addOnFooterStateListener(new RefreshLoadLayout.OnFooterStateListener() {
+        @Override
+        public void onScrollChange(View Footer, int scrollOffset, int scrollRatio) {
 
-            }
+        }
 
-            @Override
-            public void onLoadMore(View Footer) {
-                //关闭加载
-                mRll.loadMoreFinish();
-            }
+        @Override
+        public void onLoadMore(View Footer) {
+            //关闭加载
+            mRll.loadMoreFinish();
+        }
 
-            @Override
-            public void onFinished(View Footer) {
+        @Override
+        public void onFinished(View Footer) {
 
-            }
+        }
 
-            @Override
-            public void onNotMore(View Footer) {
+        @Override
+        public void onNotMore(View Footer) {
 
-            }
+        }
 
-            @Override
-            public void onHasMore(View Footer) {
+        @Override
+        public void onHasMore(View Footer) {
 
-            }
-        });
+        }
+});
 ```
-## Document
+# Document
 
 方法名|约束
 --|--
