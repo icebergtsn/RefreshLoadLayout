@@ -1,6 +1,6 @@
 # Dependency
 
-支持RecyclerView  下拉新，加载更多 ScrollerView WebView下拉刷新，app中有示例。
+支持RecyclerView  下拉刷新，加载更多 ScrollerView WebView下拉刷新，app中有示例。
 
 Add this in your root build.gradle file:
 
