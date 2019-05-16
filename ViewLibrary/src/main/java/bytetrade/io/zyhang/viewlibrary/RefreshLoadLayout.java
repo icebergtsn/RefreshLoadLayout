@@ -185,7 +185,7 @@ public class RefreshLoadLayout extends ViewGroup {
         mFooterNoData = FooterNoData;
     }
 
-    public void setEmpty(final View view) {
+    public void setEmpty(View view) {
         view.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
