@@ -1,6 +1,6 @@
 # Dependency
 
-支持RecyclerView ScrollerView 下拉刷新，加载更多 WebView下拉刷新，app中有示例。
+支持RecyclerView  下拉新，加载更多 ScrollerView WebView下拉刷新，app中有示例。
 
 Add this in your root build.gradle file:
 
@@ -17,6 +17,10 @@ Then, add the library to your module build.gradle:
 dependencies {
          implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.0'
 }
+```
+Don't forget to add this whether you use it or not
+```
+implementation 'com.android.support:recyclerview-v7:28.0.0'
 ```
 ### RecyclerView
 
