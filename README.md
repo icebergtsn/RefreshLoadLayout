@@ -22,6 +22,9 @@ Don't forget to add this whether you use it or not
 ```
 implementation 'com.android.support:recyclerview-v7:28.0.0'
 ```
+
+# Usage
+
 ### RecyclerView
 
 xml
@@ -38,16 +41,18 @@ xml
     
 </bytetrade.io.zyhang.viewlibrary.RefreshLoadLayout>
 ```
-
 java
 
 ```java
-mRll.setFunctionState(true, true);
-mRll.setDamp(4);
-mRll.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
-mRll.setFooter(getLayoutInflater().inflate(R.layout.layout_footer, null));
+//设置开启下拉刷新和上拉加载
+        mRll.setFunctionState(true, true);
+        //头部布局
+        mRll.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
+        //底部布局
+        mRll.setFooter(getLayoutInflater().inflate(R.layout.layout_footer, null));
 
-mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
+        //头部状态监听
+        mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
             @Override
             public void onScrollChange(View Header, int scrollOffset, int scrollRatio) {
 
@@ -55,12 +60,8 @@ mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
 
             @Override
             public void onRefresh(View Header) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRll.refreshFinish();
-                    }
-                }, 3000);
+                //关闭刷新
+                mRll.refreshFinish();
             }
 
             @Override
@@ -69,7 +70,8 @@ mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
             }
         });
 
-mRll.addOnFooterStateListener(new RefreshLoadLayout.OnFooterStateListener() {
+        //尾部状态监听
+        mRll.addOnFooterStateListener(new RefreshLoadLayout.OnFooterStateListener() {
             @Override
             public void onScrollChange(View Footer, int scrollOffset, int scrollRatio) {
 
@@ -77,13 +79,8 @@ mRll.addOnFooterStateListener(new RefreshLoadLayout.OnFooterStateListener() {
 
             @Override
             public void onLoadMore(View Footer) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRll.loadMoreFinish();
-                        //mRll.isMore(false);
-                    }
-                }, 3000);
+                //关闭加载
+                mRll.loadMoreFinish();
             }
 
             @Override
@@ -102,4 +99,25 @@ mRll.addOnFooterStateListener(new RefreshLoadLayout.OnFooterStateListener() {
             }
         });
 ```
+## Document
+
+方法名|约束
+--|--
+setFunctionState(boolean isRefresh, boolean isLoadMore)|设置下拉刷新与上拉加载开启关闭
+setHeader(View Header)|设置下拉刷新布局
+setFooter(View Footer)|设置上拉加载布局
+setFooterNoData(View FooterNoData)|设置底部没有数据布局
+setEmpty(View view)|webview空布局
+setEmptyState(boolean isEmpty)|设置webview空布局显示关闭
+refreshFinish()|下拉刷新完成
+loadMoreFinish()|上拉加载完成
+isMore(boolean isMore)|是否有更多数据
+addOnHeaderStateListener(OnHeaderStateListener listener)|添加头部状态监听器
+addOnFooterStateListener(OnFooterStateListener listener)|添加底部状态监听器
+removeOnHeaderStateListener()|移除头部状态监听器
+removeOnFooterStateListener()|移除尾部状态监听哦
+setDamp(int damp)|设置滑动阻力
+
+
+
 
