@@ -15,7 +15,7 @@ allprojects {
 Then, add the library to your module build.gradle:
 ```java
 dependencies {
-        implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.0'
+        implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.1'
 }
 ```
 Don't forget to add this whether you use it or not
