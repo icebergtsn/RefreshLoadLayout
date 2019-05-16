@@ -26,6 +26,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     RefreshLoadLayout mRll;
     RecyclerView mRecycleView;
     ArrayList<String> mArrayList;
+    myAdapter myAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
         mRll = findViewById(R.id.rll_recycler);
 
         mRll.setFunctionState(true, true);
-        mRll.setDamp(4);
+        mRll.setDamp(2);
         mRll.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
         mRll.setFooter(getLayoutInflater().inflate(R.layout.layout_footer, null));
 
@@ -73,8 +74,14 @@ public class RecyclerViewActivity extends AppCompatActivity {
                     public void run() {
                         mRll.loadMoreFinish();
                         //mRll.isMore(false);
+                        for (int i = 0; i < 5; i++) {
+                            mArrayList.add("???" + i);
+                        }
+                        myAdapter.notifyDataSetChanged();
+
                     }
                 }, 3000);
+
             }
 
             @Override
@@ -95,13 +102,14 @@ public class RecyclerViewActivity extends AppCompatActivity {
         //adapter数据
         mArrayList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            mArrayList.add("???");
+            mArrayList.add("???"+i);
         }
         //recycler设置
         mRecycleView = findViewById(R.id.recycler);
         mRecycleView.setItemAnimator(new DefaultItemAnimator());
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        mRecycleView.setAdapter(new myAdapter());
+        myAdapter = new myAdapter();
+        mRecycleView.setAdapter(myAdapter);
 
     }
 

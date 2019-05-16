@@ -2,6 +2,9 @@ package bytetrade.io.zyhang.viewlibrary;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -16,7 +19,7 @@ import android.widget.Scroller;
 /**
  * Created by zyhang on 2019/5/13
  * <p>
- * Description: 支持RecyclerView ScrollerView 下拉刷新，加载更多 WebView下拉刷新
+ * Description: 支持RecyclerView 下拉刷新，加载更多 ScrollerView WebView下拉刷新
  */
 public class RefreshLoadLayout extends ViewGroup {
 
@@ -244,6 +247,7 @@ public class RefreshLoadLayout extends ViewGroup {
                 mIsRefresh = false;
                 if (mHeaderStateListener != null) {
                     mHeaderStateListener.onFinished(mHeader);
+
                 }
             }
         }
@@ -610,18 +614,49 @@ public class RefreshLoadLayout extends ViewGroup {
 
     protected boolean isChildTop(ViewGroup viewGroup) {
         int minY = 0;
-        int count = viewGroup.getChildCount();
-        for (int i = 0; i < count; i++) {
-            View view = viewGroup.getChildAt(i);
-            int topMargin = 0;
-            LayoutParams lp = view.getLayoutParams();
-            if (lp instanceof MarginLayoutParams) {
-                topMargin = ((MarginLayoutParams) lp).topMargin;
+        int realCount;
+        int firstVisibleItem;
+
+        if (viewGroup instanceof RecyclerView) {
+            RecyclerView recyclerView = (RecyclerView) viewGroup;
+            if (recyclerView.getAdapter() != null) {
+                realCount = recyclerView.getAdapter().getItemCount();
+                if (realCount == 0) {
+                    return false;
+                }
+                if (recyclerView.getLayoutManager() != null) {
+                    if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                        LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        firstVisibleItem = manager.findFirstCompletelyVisibleItemPosition();
+                    } else {
+                        GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
+                        firstVisibleItem = manager.findFirstCompletelyVisibleItemPosition();
+                    }
+                    return firstVisibleItem == 0;
+                }
+                return false;
+
             }
-            int top = view.getTop() - topMargin;
-            minY = Math.min(minY, top);
+            return false;
+        } else {
+            realCount = viewGroup.getChildCount();
+
+            if (realCount == 0) {
+                return false;
+            }
+
+            for (int i = 0; i < realCount; i++) {
+                View view = viewGroup.getChildAt(i);
+                int topMargin = 0;
+                LayoutParams lp = view.getLayoutParams();
+                if (lp instanceof MarginLayoutParams) {
+                    topMargin = ((MarginLayoutParams) lp).topMargin;
+                }
+                int top = view.getTop() - topMargin;
+                minY = Math.min(minY, top);
+            }
+            return minY >= 0;
         }
-        return minY >= 0;
     }
 
     protected boolean isBottom() {
@@ -651,26 +686,51 @@ public class RefreshLoadLayout extends ViewGroup {
 
     protected boolean isChildBottom(ViewGroup viewGroup) {
         int maxY = 0;
-        int count = viewGroup.getChildCount();
+        int realCount;
+        int lastVisibleItem;
+        if (viewGroup instanceof RecyclerView) {
+            RecyclerView recyclerView = (RecyclerView) viewGroup;
+            if (recyclerView.getAdapter() != null) {
+                realCount = recyclerView.getAdapter().getItemCount();
+                if (realCount == 0) {
+                    return false;
+                }
+                if (recyclerView.getLayoutManager() != null) {
+                    if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                        LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        lastVisibleItem = manager.findLastCompletelyVisibleItemPosition() + 1;
+                    } else {
+                        GridLayoutManager manager = (GridLayoutManager) recyclerView.getLayoutManager();
+                        lastVisibleItem = manager.findLastCompletelyVisibleItemPosition() + 1;
+                    }
+                    return lastVisibleItem == realCount;
+                }
+                return false;
 
-        if (count == 0) {
-            return false;
-        }
-
-        for (int i = 0; i < count; i++) {
-            View view = viewGroup.getChildAt(i);
-            int bottomMargin = 0;
-            LayoutParams lp = view.getLayoutParams();
-            if (lp instanceof MarginLayoutParams) {
-                bottomMargin = ((MarginLayoutParams) lp).bottomMargin;
             }
-            int bottom = view.getBottom() + bottomMargin;
-            maxY = Math.max(maxY, bottom);
+            return false;
+        } else {
+            realCount = viewGroup.getChildCount();
+
+            if (realCount == 0) {
+                return false;
+            }
+
+            for (int i = 0; i < realCount; i++) {
+                View view = viewGroup.getChildAt(i);
+                int bottomMargin = 0;
+                LayoutParams lp = view.getLayoutParams();
+                if (lp instanceof MarginLayoutParams) {
+                    bottomMargin = ((MarginLayoutParams) lp).bottomMargin;
+                }
+                int bottom = view.getBottom() + bottomMargin;
+                maxY = Math.max(maxY, bottom);
+            }
+
+            int h = viewGroup.getMeasuredHeight() - viewGroup.getPaddingBottom();
+
+            return maxY <= h;
         }
-
-        int h = viewGroup.getMeasuredHeight() - viewGroup.getPaddingBottom();
-
-        return maxY <= h;
     }
 
     /****************************接口*************************/
