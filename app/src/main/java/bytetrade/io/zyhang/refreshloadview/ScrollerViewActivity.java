@@ -48,4 +48,10 @@ public class ScrollerViewActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRll.removeOnHeaderStateListener();
+    }
 }

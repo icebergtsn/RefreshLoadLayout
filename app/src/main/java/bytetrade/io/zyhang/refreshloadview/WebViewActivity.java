@@ -29,9 +29,11 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
-
         mRll = findViewById(R.id.rll_web);
+        mWebView = findViewById(R.id.web);
+
         mRll.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
+        //加载错误时的空布局
         mRll.setEmpty( getLayoutInflater().inflate(R.layout.layout_empty, null));
 
         mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
@@ -45,7 +47,7 @@ public class WebViewActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //正确地址
+                        //模拟打开正确地址
                         mWebView.loadUrl("https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=2&tn=baiduhome_pg&wd=webview%E9%87%8D%E6%96%B0%E5%8A%A0%E8%BD%BD&rsv_spt=1&oq=RelativeLayout.LayoutParams&rsv_pq=b808325f000048de&rsv_t=e51cfsZDdW65ruvjHyJgz3cKWvRZsOxOs5wyQ0tKTHrOxTM4WwjUR4o3W2vX64JOY676&rqlang=cn&rsv_enter=1&inputT=9062&rsv_sug3=103&rsv_sug1=6&rsv_sug7=100&rsv_sug2=0&rsv_sug4=10024");
                         mRll.refreshFinish();
                     }
@@ -59,8 +61,8 @@ public class WebViewActivity extends AppCompatActivity {
         });
 
 
-        mWebView = findViewById(R.id.web);
-        //错误地址
+
+        //模拟一个错误请求地址
         mWebView.loadUrl("https://blowprofilcoding/article/details/77928614");
 
         mWebView.setWebViewClient(new WebViewClient() {

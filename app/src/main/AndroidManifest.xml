@@ -21,6 +21,7 @@
         <activity android:name=".ScrollerViewActivity" />
         <activity android:name=".RecyclerViewActivity" />
         <activity android:name=".WebViewActivity" />
+        <activity android:name=".RecyclerViewModelActivity" />
     </application>
 
 </manifest>

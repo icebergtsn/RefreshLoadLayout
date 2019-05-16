@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class RefreshLoadLayout extends ViewGroup {
     //最小高度
     private static final int HEADER_DEFAULT_HEIGHT = 100;
     private static final int FOOTER_DEFAULT_HEIGHT = 100;
+    private static final int FOOTER_NO_DATA_DEFAULT_HEIGHT = 60;
     //刷新高度
     private static final int REFRESH_HEIGHT = 20;
     private static final int LOAD_MORE_HEIGHT = 20;
@@ -38,6 +40,7 @@ public class RefreshLoadLayout extends ViewGroup {
     //View
     private View mHeader;
     private View mFooter;
+    private View mFooterNoData;
     //高度
     private int mHeaderHeight = HEADER_DEFAULT_HEIGHT;
     private int mFooterHeight = FOOTER_DEFAULT_HEIGHT;
@@ -150,13 +153,6 @@ public class RefreshLoadLayout extends ViewGroup {
                 invalidate();
             }
         });
-
-        mHeaderLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
     }
 
     public void setFooter(View Footer) {
@@ -183,12 +179,10 @@ public class RefreshLoadLayout extends ViewGroup {
                 invalidate();
             }
         });
+    }
 
-        mFooterLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+    public void setFooterNoData(View FooterNoData) {
+        mFooterNoData = FooterNoData;
     }
 
     public void setEmpty(final View view) {
@@ -247,7 +241,7 @@ public class RefreshLoadLayout extends ViewGroup {
                 mIsRefresh = false;
                 if (mHeaderStateListener != null) {
                     mHeaderStateListener.onFinished(mHeader);
-
+                    isMore(true);
                 }
             }
         }
@@ -272,11 +266,43 @@ public class RefreshLoadLayout extends ViewGroup {
         this.isMore = isMore;
         if (mFooterStateListener != null) {
             if (isMore) {
+                setFooter(mFooter);
                 mFooterStateListener.onHasMore(mFooter);
             } else {
+                setFooterNoData();
                 mFooterStateListener.onNotMore(mFooter);
             }
         }
+    }
+
+
+    private void setFooterNoData() {
+        if (mFooterNoData == null) {
+            mFooterNoData = LayoutInflater.from(mContext).inflate(R.layout.layout_no_data, null);
+        }
+        mFooterLayout.removeAllViews();
+        mFooterLayout.addView(mFooterNoData);
+
+        //获取尾部高度
+        mFooterLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mFooter.getHeight() > FOOTER_NO_DATA_DEFAULT_HEIGHT) {
+                    mFooterHeight = mFooter.getHeight();
+                } else {
+                    mFooterHeight = FOOTER_NO_DATA_DEFAULT_HEIGHT;
+                }
+
+                setLayoutParams(mFooterLayout, mFooterHeight);
+
+                //当获取到尾部高度的时候，如果正处于上拉刷新状态，应该把尾部打开。
+                if (mIsLoadMore) {
+                    scroll(mFooterHeight);
+                }
+                invalidate();
+            }
+        });
+
     }
 
     //设置头部监听器
@@ -429,6 +455,11 @@ public class RefreshLoadLayout extends ViewGroup {
     private void startLoadMore() {
 
         if (!mIsLoadMoreOpen) {
+            return;
+        }
+
+        if (!isMore) {
+            fastRestore();
             return;
         }
 

@@ -8,7 +8,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    Button mBtnScroll, mBtnRecycler, mBtnWeb;
+    Button mBtnScroll, mBtnRecycler, mBtnWeb, mBtnRecyclerModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,10 +17,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBtnScroll = findViewById(R.id.btn_scroll);
         mBtnRecycler = findViewById(R.id.btn_recycler);
         mBtnWeb = findViewById(R.id.btn_web);
+        mBtnRecyclerModel = findViewById(R.id.btn_recycler_model);
 
         mBtnScroll.setOnClickListener(this);
         mBtnRecycler.setOnClickListener(this);
         mBtnWeb.setOnClickListener(this);
+        mBtnRecyclerModel.setOnClickListener(this);
     }
 
     @Override
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_web:
                 startActivity(new Intent(MainActivity.this, WebViewActivity.class));
+                break;
+            case R.id.btn_recycler_model:
+                startActivity(new Intent(MainActivity.this, RecyclerViewModelActivity.class));
                 break;
             default:
                 break;

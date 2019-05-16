@@ -20,13 +20,12 @@ import bytetrade.io.zyhang.viewlibrary.RefreshLoadLayout;
 /**
  * Created by zyhang on 2019/5/15
  * <p>
- * Description:
+ * Description: 简单使用
  */
 public class RecyclerViewActivity extends AppCompatActivity {
     RefreshLoadLayout mRll;
     RecyclerView mRecycleView;
     ArrayList<String> mArrayList;
-    myAdapter myAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,11 +33,14 @@ public class RecyclerViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recyclerview);
         mRll = findViewById(R.id.rll_recycler);
 
+        //设置开启下拉刷新和上拉加载
         mRll.setFunctionState(true, true);
-        mRll.setDamp(2);
+        //头部布局
         mRll.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
+        //底部布局
         mRll.setFooter(getLayoutInflater().inflate(R.layout.layout_footer, null));
 
+        //头部状态监听
         mRll.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
             @Override
             public void onScrollChange(View Header, int scrollOffset, int scrollRatio) {
@@ -47,12 +49,8 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
             @Override
             public void onRefresh(View Header) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRll.refreshFinish();
-                    }
-                }, 3000);
+                //关闭刷新
+                mRll.refreshFinish();
             }
 
             @Override
@@ -61,6 +59,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
             }
         });
 
+        //尾部状态监听
         mRll.addOnFooterStateListener(new RefreshLoadLayout.OnFooterStateListener() {
             @Override
             public void onScrollChange(View Footer, int scrollOffset, int scrollRatio) {
@@ -69,19 +68,8 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore(View Footer) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRll.loadMoreFinish();
-                        //mRll.isMore(false);
-                        for (int i = 0; i < 5; i++) {
-                            mArrayList.add("???" + i);
-                        }
-                        myAdapter.notifyDataSetChanged();
-
-                    }
-                }, 3000);
-
+                //关闭加载
+                mRll.loadMoreFinish();
             }
 
             @Override
@@ -102,19 +90,24 @@ public class RecyclerViewActivity extends AppCompatActivity {
         //adapter数据
         mArrayList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
-            mArrayList.add("???"+i);
+            mArrayList.add("数据" + i);
         }
         //recycler设置
         mRecycleView = findViewById(R.id.recycler);
-        mRecycleView.setItemAnimator(new DefaultItemAnimator());
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        myAdapter = new myAdapter();
-        mRecycleView.setAdapter(myAdapter);
+        mRecycleView.setAdapter(new SimpleAdapter());
 
     }
 
+    //移除监听器
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRll.removeOnHeaderStateListener();
+    }
 
-    class myAdapter extends RecyclerView.Adapter<myAdapter.viewHolder> {
+    //一个简单的adapter
+    class SimpleAdapter extends RecyclerView.Adapter<SimpleAdapter.viewHolder> {
 
         @NonNull
         @Override
@@ -143,4 +136,5 @@ public class RecyclerViewActivity extends AppCompatActivity {
             }
         }
     }
+
 }

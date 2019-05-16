@@ -15,7 +15,7 @@
         android:id="@+id/btn_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="RecyclerView"
+        android:text="RecyclerView简单使用"
         android:textAllCaps="false" />
 
     <Button
@@ -23,6 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="webView"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/btn_recycler_model"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RecyclerView案例"
         android:textAllCaps="false" />
 
 </LinearLayout>
