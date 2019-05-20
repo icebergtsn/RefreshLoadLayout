@@ -3,9 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <TextView
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="#cc1231" />
+        android:layout_height="wrap_content"
+        android:background="#cc1231"
+        android:gravity="center"
+        android:text="没有数据"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
 
 </RelativeLayout>

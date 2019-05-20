@@ -69,7 +69,8 @@ public class RefreshLoadLayout extends ViewGroup {
     //加载状态
     private boolean mIsLoading = false;
 
-    private int mDamp = 4;
+    //默认阻力
+    private int mDamp = 2;
 
     //是否还有更多数据
     private boolean isMore = true;
@@ -120,14 +121,8 @@ public class RefreshLoadLayout extends ViewGroup {
         addView(mEmptyLayout);
     }
 
-    /***************************RefreshLoadLayout可用方法*************************/
 
-    private void setLayoutParams(LinearLayout layout, int height) {
-        LayoutParams layoutParams = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.setGravity(Gravity.CENTER);
-        layoutParams.height = height;
-        layout.setLayoutParams(layoutParams);
-    }
+    /***************************RefreshLoadLayout可用方法*************************/
 
     public void setHeader(View Header) {
         mHeader = Header;
@@ -276,35 +271,6 @@ public class RefreshLoadLayout extends ViewGroup {
     }
 
 
-    private void setFooterNoData() {
-        if (mFooterNoData == null) {
-            mFooterNoData = LayoutInflater.from(mContext).inflate(R.layout.layout_no_data, null);
-        }
-        mFooterLayout.removeAllViews();
-        mFooterLayout.addView(mFooterNoData);
-
-        //获取尾部高度
-        mFooterLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mFooter.getHeight() > FOOTER_NO_DATA_DEFAULT_HEIGHT) {
-                    mFooterHeight = mFooter.getHeight();
-                } else {
-                    mFooterHeight = FOOTER_NO_DATA_DEFAULT_HEIGHT;
-                }
-
-                setLayoutParams(mFooterLayout, mFooterHeight);
-
-                //当获取到尾部高度的时候，如果正处于上拉刷新状态，应该把尾部打开。
-                if (mIsLoadMore) {
-                    scroll(mFooterHeight);
-                }
-                invalidate();
-            }
-        });
-
-    }
-
     //设置头部监听器
     public void addOnHeaderStateListener(OnHeaderStateListener listener) {
         mHeaderStateListener = listener;
@@ -427,6 +393,45 @@ public class RefreshLoadLayout extends ViewGroup {
             View content = getChildAt(3);
             content.layout(getPaddingLeft(), getPaddingTop(), getPaddingLeft() + content.getMeasuredWidth(), getPaddingTop() + content.getMeasuredHeight());
         }
+    }
+
+    /***************************私有方法*************************/
+
+
+    private void setLayoutParams(LinearLayout layout, int height) {
+        LayoutParams layoutParams = new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout.setGravity(Gravity.CENTER);
+        layoutParams.height = height;
+        layout.setLayoutParams(layoutParams);
+    }
+
+    private void setFooterNoData() {
+        if (mFooterNoData == null) {
+            mFooterNoData = LayoutInflater.from(mContext).inflate(R.layout.layout_no_data, mFooterLayout);
+        } else {
+            mFooterLayout.removeAllViews();
+            mFooterLayout.addView(mFooterNoData);
+        }
+        //获取尾部高度
+        mFooterLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mFooter.getHeight() > FOOTER_NO_DATA_DEFAULT_HEIGHT) {
+                    mFooterHeight = mFooter.getHeight();
+                } else {
+                    mFooterHeight = FOOTER_NO_DATA_DEFAULT_HEIGHT;
+                }
+
+                setLayoutParams(mFooterLayout, mFooterHeight);
+
+                //当获取到尾部高度的时候，如果正处于上拉刷新状态，应该把尾部打开。
+                if (mIsLoadMore) {
+                    scroll(mFooterHeight);
+                }
+                invalidate();
+            }
+        });
+
     }
 
     /**
@@ -576,6 +581,7 @@ public class RefreshLoadLayout extends ViewGroup {
     }
 
     int mY = 0;
+
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {

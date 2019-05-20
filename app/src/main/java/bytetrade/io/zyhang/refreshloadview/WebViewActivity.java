@@ -97,4 +97,10 @@ public class WebViewActivity extends AppCompatActivity {
 
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRll.removeOnHeaderStateListener();
+    }
 }

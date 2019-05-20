@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ public class RecyclerViewModelActivity extends AppCompatActivity {
     int mLoadTime = 0;
     SimpleAdapter mSimpleAdapter;
 
+    TextView mTvHeader, mTvFooter;
+    ImageView mImgHeader, mImgFooter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,9 +46,18 @@ public class RecyclerViewModelActivity extends AppCompatActivity {
         //设置滑动阻力
         mRefreshLayout.setDamp(2);
         //可选设置底部无数据时布局，也有默认布局
-        //mRefreshLayout.setFooterNoData(getLayoutInflater().inflate(R.layout.layout_footer_no_data_test, null));
-        mRefreshLayout.setHeader(getLayoutInflater().inflate(R.layout.layout_header, null));
-        mRefreshLayout.setFooter(getLayoutInflater().inflate(R.layout.layout_footer, null));
+        mRefreshLayout.setFooterNoData(getLayoutInflater().inflate(R.layout.layout_no_data, null));
+        View header = getLayoutInflater().inflate(R.layout.layout_header, null);
+        View footer = getLayoutInflater().inflate(R.layout.layout_footer, null);
+
+        mImgHeader = header.findViewById(R.id.img_header_status);
+        mImgFooter = footer.findViewById(R.id.img_footer_status);
+
+        mTvHeader = header.findViewById(R.id.tv_header_status);
+        mTvFooter = footer.findViewById(R.id.tv_footer_status);
+
+        mRefreshLayout.setHeader(header);
+        mRefreshLayout.setFooter(footer);
 
         mRefreshLayout.addOnHeaderStateListener(new RefreshLoadLayout.OnHeaderStateListener() {
             @Override
@@ -56,9 +68,12 @@ public class RecyclerViewModelActivity extends AppCompatActivity {
             @Override
             public void onRefresh(View Header) {
                 //通过接口获得Footer开启动画
-                RotateAnimation anim = new RotateAnimation(0f, 720f, Header.getWidth() / 2, Header.getHeight() / 2);
+
+                RotateAnimation anim = new RotateAnimation(0f, 720f, mImgHeader.getWidth() / 2, mImgHeader.getHeight() / 2);
                 anim.setDuration(3000);
-                Header.startAnimation(anim);
+                mImgHeader.startAnimation(anim);
+
+                mTvHeader.setText("下拉刷新中···");
 
                 //模拟网络请求延时
                 new Handler().postDelayed(new Runnable() {
@@ -80,7 +95,7 @@ public class RecyclerViewModelActivity extends AppCompatActivity {
 
             @Override
             public void onFinished(View Header) {
-
+                mTvHeader.setText("下拉刷新");
             }
 
 
@@ -93,12 +108,14 @@ public class RecyclerViewModelActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onLoadMore(final View Footer) {
+            public void onLoadMore(View Footer) {
                 if (mLoadTime < 2) {
                     //通过接口获得Footer开启动画
-                    RotateAnimation anim = new RotateAnimation(0f, 720f, Footer.getWidth() / 2, Footer.getHeight() / 2);
+                    RotateAnimation anim = new RotateAnimation(0f, 720f, mImgFooter.getWidth() / 2, mImgFooter.getHeight() / 2);
                     anim.setDuration(2000);
-                    Footer.startAnimation(anim);
+                    mImgFooter.startAnimation(anim);
+
+                    mTvFooter.setText("上拉加载中···");
 
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -125,6 +142,7 @@ public class RecyclerViewModelActivity extends AppCompatActivity {
 
             @Override
             public void onFinished(View Footer) {
+                mTvFooter.setText("上拉加载更多");
             }
 
             @Override
