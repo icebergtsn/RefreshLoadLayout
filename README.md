@@ -15,7 +15,7 @@ allprojects {
 Then, add the library to your module build.gradle:
 ```java
 dependencies {
-        implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.1'
+        implementation 'com.github.icebergtsn:RefreshLoadLayout:v1.2'
 }
 ```
 Don't forget to add this whether you use it or not
@@ -117,7 +117,7 @@ isMore(boolean isMore)|是否有更多数据
 addOnHeaderStateListener(OnHeaderStateListener listener)|添加头部状态监听器
 addOnFooterStateListener(OnFooterStateListener listener)|添加底部状态监听器
 removeOnHeaderStateListener()|移除头部状态监听器
-removeOnFooterStateListener()|移除尾部状态监听哦
+removeOnFooterStateListener()|移除尾部状态监听器
 setDamp(int damp)|设置滑动阻力
 
 
